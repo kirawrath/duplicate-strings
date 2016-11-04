@@ -1,4 +1,5 @@
 // C++ implementation of Radix Sort
+// I'm not reinventing the wheel here, most of this code is from:
 // http://www.geeksforgeeks.org/radix-sort/
 #include<vector>
 #include"radix.h"

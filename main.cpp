@@ -1,95 +1,107 @@
 #include "sets.h"
-
-class Test
-{
-    public:
-    Test(const char* file_name)
-    {
-        ifstream file(file_name);
-        string line;
-        while( getline(file, line) )
-        {
-            sets.add_set(line);
-        }
-    }
-    bool test_duplicates(unsigned int expected_duplicates,
-            unsigned int expected_unique) const
-    {
-        unsigned int dup, uni;
-        sets.get_n_duplicates(dup, uni);
-        return ((dup==expected_duplicates) and (expected_unique==uni));        
-    }
-    bool test_most_repeated(vector<int> expected, unsigned int n_repeated)
-    {
-        int ret;
-        vector<int> s = sets.get_most_repeated_vec(ret);
-        auto it1 = expected.begin();
-        for(auto it0 = s.begin();
-                (it0 != s.end()) && (it1 != expected.end());
-                ++it0, ++it1)
-        {
-            if(*it0!=*it1)
-                return false;
-        }
-        return (ret == n_repeated);
-    }
-    bool test_invalids(vector<string> expected)
-    {
-        return expected == sets.get_invalids();
-    }
-    void print_most_repeated() const
-    {
-        int times;
-        string s = sets.get_most_repeated(times);
-        cout << s << "repeated " << times << " times.\n";
-    }
-    void print_invalid() 
-    {
-        cout << "Invalid inputs:" << endl;
-        auto& vec = sets.get_invalids();
-        for(auto& i : vec )
-            cout << i << endl;
-        cout << "Total invalid lines: " << vec.size()<< endl;
-    }
-    void print_n_duplicates() const
-    {
-        unsigned int dup, unique;
-        sets.get_n_duplicates(dup, unique);
-        cout << "Total duplicates: " << dup <<".\n";
-        cout << "Total unique: " << unique << ".\n";
-    }
-    void print_all()
-    {
-        print_n_duplicates();
-        print_most_repeated();
-        print_invalid();
-    }
-    UniqueSets sets;
-};
+#include "test.h"
 
 int main()
 {
-    Test t("./input.txt");
-    t.print_all();        
-
-    cout << "duplicates test: " <<
-        (t.test_duplicates(475,27) ? "OK" : "FAIL") << endl;
-
-    vector<int> vec = {3,5,11,23,24,88,189};
-    cout << "most repeated test: " <<
-        (t.test_most_repeated(vec, 29) ? "OK" : "FAIL") << endl;
-    
-    vector<string> inv =
+    /* TEST 1 */
     {
-        ",,,,",
-        "A, B, C",
-        "---",
-        "This line should be ignored because it's not valid",
-        ","
+        cout << "\nTEST 1\n\n";
+        Test t("./tests/input.txt");
+        t.print_all();
+
+        cout << "duplicates test: " <<
+            (t.test_duplicates(475,26) ? "OK" : "FAIL") << endl;
+
+        vector<int> vec = {3,5,11,23,24,88,189};
+        cout << "most repeated test: " <<
+            (t.test_most_repeated(vec, 28) ? "OK" : "FAIL") << endl;
+
+        vector<string> inv =
+        {
+            ",,,,",
+            "A, B, C",
+            "---",
+            "This line should be ignored because it's not valid",
+            ",",
+            "50 41 87 95"
+        };
+
+        cout << "invalid test: " <<
+            (t.test_invalids(inv) ? "OK":"FAIL") << endl;
+    }
+    {
+        /* TEST 2 */
+        cout << "\nTEST 2\n\n";
+        Test t("./tests/input2.txt");
+        t.print_all();
+
+        cout << "\nDuplicates test: " <<
+            (t.test_duplicates(0,4) ? "OK" : "FAIL") << endl;
+
+        vector<int> vec = {};
+        cout << "Most repeated test: " <<
+            (t.test_most_repeated(vec, 0) ? "OK" : "FAIL") << endl;
+
+        vector<string> inv =
+        {
+            "Hello NCR",
+            "!@#$"
+        };
+
+        cout << "Invalid test: " <<
+            (t.test_invalids(inv) ? "OK":"FAIL") << endl;
+    }
+    /* TEST 3 */
+    {
+        cout << "\nTEST 3\n\n";
+        Test t("./tests/input3.txt");
+        t.print_all();
+
+        cout << "\nDuplicates test: " <<
+            (t.test_duplicates(0,3) ? "OK" : "FAIL") << endl;
+
+        vector<int> vec = {};
+        cout << "Most repeated test: " <<
+            (t.test_most_repeated(vec, 0) ? "OK" : "FAIL") << endl;
+
+        vector<string> inv =
+        {
+            "1 2 3",
+            "Numbers without commas?"
+        };
+
+        cout << "Invalid test: " <<
+            (t.test_invalids(inv) ? "OK":"FAIL") << endl;
+    }
+    /* TEST 4 */
+    {
+        cout << "\nTEST 4\n\n";
+        Test t("./tests/input4.txt");
+        t.print_all();        
+
+        cout << "\nDuplicates test: " <<
+            (t.test_duplicates(10,2) ? "OK" : "FAIL") << endl;
+
+        vector<int> vec = {0,1,2};
+        cout << "Most repeated test: " <<
+            (t.test_most_repeated(vec, 9) ? "OK" : "FAIL") << endl;
+
+        vector<string> inv =
+        {
+            "0 1 2",
+            "// 9 duplicates so far (not 10 nor 11)",
+            "4,5,@",
+            "just 2 unique"
+        };
+
+        cout << "Invalid test: " <<
+            (t.test_invalids(inv) ? "OK":"FAIL") << endl;
     }
 
-    cout << "invalid test: " <<
-        (t.test_invalids(inv) ? "OK":"FAIL") << endl;
+    if(Test::test_failed())
+        cout << "\nTEST FAILED" << endl;
+    else
+        cout << "\nALL TESTS PASSED!" << endl;
 
     return 0;
 }

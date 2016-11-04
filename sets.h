@@ -1,8 +1,8 @@
 #ifndef UNIQUE_SETS_H
 #define UNIQUE_SETS_H
 
-#include<iostream>
-#include<set>
+#include <iostream>
+#include <set>
 #include <locale>
 #include <algorithm>
 #include <iterator>
@@ -30,16 +30,14 @@ class UniqueSets
     vector<string>& get_invalids();
 
     private:
-    void print_vec(const vector<int>& v) const;
     inline bool is_integer(const std::string &s);
     void populate_vector(string line, vector<int>& s);
-    int invalid_count() const;
 
     vector<string> invalid_str;
     Node* root;
     unsigned int n_duplicated, n_unique;
-    string most_frequent;
     int most_frequent_n;
+    string most_frequent;
 };
 
 #endif
