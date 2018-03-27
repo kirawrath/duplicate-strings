@@ -99,7 +99,7 @@ int main()
     }
 
     if(Test::test_failed())
-        cout << "\nTEST FAILED" << endl;
+        cout << "\nTEST FAILED." << endl;
     else
         cout << "\nALL TESTS PASSED!" << endl;
 
